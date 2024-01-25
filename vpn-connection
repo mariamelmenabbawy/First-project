@@ -1,0 +1,26 @@
+#!/bin/bash
+
+warp-cli connect
+sleep 1
+ssh $1
+if [ $? -eq 0 ]
+then
+	echo "Successful ssh connextion"
+else
+	echo "failed ssh connection"
+	warp-cli disconnect
+	exit
+fi
+warp-cli disconnect
+openvpn $2
+sleep 5
+
+ping 10.10.10.10 -c 3
+if [ $? -eq 0 ]
+then
+        echo "Successful connection to VPN"
+else
+        echo "failed Connection to VPN"
+        exit
+fi
+
